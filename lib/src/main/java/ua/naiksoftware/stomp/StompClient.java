@@ -46,14 +46,14 @@ public class StompClient {
     private PathMatcher pathMatcher;
     private Disposable lifecycleDisposable;
     private Disposable messagesDisposable;
-    private PublishSubject<LifecycleEvent> lifecyclePublishSubject;
+    private BehaviorSubject<LifecycleEvent> lifecyclePublishSubject;
     private List<StompHeader> headers;
     private HeartBeatTask heartBeatTask;
 
     public StompClient(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
         streamMap = new ConcurrentHashMap<>();
-        lifecyclePublishSubject = PublishSubject.create();
+        lifecyclePublishSubject = BehaviorSubject.create();
         pathMatcher = new SimplePathMatcher();
         heartBeatTask = new HeartBeatTask(this::sendHeartBeat, () -> {
             lifecyclePublishSubject.onNext(new LifecycleEvent(LifecycleEvent.Type.FAILED_SERVER_HEARTBEAT));
